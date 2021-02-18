@@ -2,7 +2,7 @@
 Angulyar app for getting history of commits from GitHub
 
 # requirements
-Git
+Git  
 NodeJS 10+
 
 # Application launch
