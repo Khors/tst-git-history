@@ -8,7 +8,8 @@ import { GithubService } from 'src/app/services/github.service';
 })
 export class CommitsComponent implements OnInit {
 
-  arr: any[] = [];
+  commits: any[] = [];
+  commitDetails: any = null;
 
   constructor(
     private githubService: GithubService
@@ -18,8 +19,16 @@ export class CommitsComponent implements OnInit {
 
   }
 
+  getBranches(){
+    this.githubService.getBranches().subscribe((res) => {
+      console.log(res);
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
   getCommitList(): void {
-    this.githubService.getCommitList().subscribe((res) => {
+    this.githubService.getCommitList('0c0feff3f005ebec607bcccac0ae77f431472ec0').subscribe((res) => {
       console.log(res);
     }, (err) => {
       console.log(err);

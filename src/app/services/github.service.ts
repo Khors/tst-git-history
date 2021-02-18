@@ -1,23 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GithubService {
 
-  private apiUrl = `https://api.github.com/repos/Khors/tst-git-history/commits`;
+  private apiUrl = `https://api.github.com/repos/Khors/tst-git-history`;
 
   constructor(
     public http: HttpClient
   ) { }
 
-  public getCommitList() {
-    return this.http.get(this.apiUrl);
+
+  public getBranches() {
+    return this.http.get(`${this.apiUrl}/branches`);
   }
 
-  public getCommit() {
-    return this.http.get(this.apiUrl);
+  public getCommitList(branch: string) {
+    const params: HttpParams = new HttpParams().append('sha', branch);
+    return this.http.get(`${this.apiUrl}/commits`, { ...params });
+  }
+
+  public getCommit(sha: string) {
+    return this.http.get(`${this.apiUrl}/commits/${sha}`);
   }
 
 }
