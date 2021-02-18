@@ -8,7 +8,8 @@ import { GithubService } from 'src/app/services/github.service';
 })
 export class CommitsComponent implements OnInit {
 
-  commits: any[] = [];
+  branches: any[] = [];
+  branchesState: any = {};
   commitDetails: any = null;
 
   constructor(
@@ -16,27 +17,42 @@ export class CommitsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.getBranches();
   }
 
-  getBranches(){
-    this.githubService.getBranches().subscribe((res) => {
-      console.log(res);
+  getBranches() {
+    this.githubService.getBranches().subscribe((res: any) => {
+      res.map((item) => {
+        this.branches.push(item);
+        this.branchesState[item.name] = {
+          name: item.name,
+          sha: item.commit.sha,
+          commits: []
+        };
+      });
     }, (err) => {
       console.log(err);
     });
   }
 
-  getCommitList(): void {
-    this.githubService.getCommitList('0c0feff3f005ebec607bcccac0ae77f431472ec0').subscribe((res) => {
+  getCommitList(event): void {
+    if (!event.nextState) return;
+    this.githubService.getCommitList(this.branchesState[event.panelId].sha).subscribe((res: any) => {
       console.log(res);
+      this.branchesState[event.panelId].commits = res.map(item => {
+        return {
+          commit: item.commit,
+          url: item.html_url,
+          sha: item.sha,
+          apiUrl: item.url
+        }        
+      });
     }, (err) => {
       console.log(err);
     });
   }
 
-  getCommit(): void {
-
+  setCommitDetails(data) {
+    this.commitDetails = data;
   }
-
 }

@@ -18,8 +18,8 @@ export class GithubService {
   }
 
   public getCommitList(branch: string) {
-    const params: HttpParams = new HttpParams().append('sha', branch);
-    return this.http.get(`${this.apiUrl}/commits`, { ...params });
+    // const params: HttpParams = new HttpParams().append('sha', branch);
+    return this.http.get(`${this.apiUrl}/commits?sha=${branch}`);
   }
 
   public getCommit(sha: string) {

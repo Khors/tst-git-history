@@ -7,10 +7,31 @@
 </div>
 <div class="row">
     <div class="col-md-5">
-        <h4>Commit list</h4>
+        <h4>Branch list</h4>
+        <!-- / -->
+        <ngb-accordion (panelChange)="getCommitList($event)">
+            <ngb-panel *ngFor="let branch of branches" title="{{branch.name}}" id="{{branch.name}}">
+                <ng-template ngbPanelContent>
+                    <h6>Commits <small>(click on commit for more details)</small></h6>
+                    <ul class="list-unstyled">
+                        <li *ngFor="let item of branchesState[branch.name].commits">
+                            <div>
+                                <p class="lead commit-item" (click)="setCommitDetails(item)">
+                                    {{item.commit.message}}
+                                </p>
+                                <small><a href="{{item.url}}" target="_blank">{{item.sha}}</a></small>
+                            </div>
+                        </li>
+                    </ul>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
     </div>
     <div class="col-md-7">
         <h4>Commit details</h4>
-        <p *ngIf="!commitDetails">No commit selected</p>
+        <p *ngIf="!commitDetails;else commitDetailsTemplate">No commit selected</p>
+        <ng-template #commitDetailsTemplate>
+            <pre>{{commitDetails | json}}</pre>
+        </ng-template>
     </div>
 </div>
